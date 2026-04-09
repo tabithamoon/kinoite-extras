@@ -4,23 +4,14 @@ set -ouex pipefail
 ### Packages
 # Enable COPRs
 dnf5 -y copr enable ublue-os/packages
-dnf5 -y copr enable ublue-os/akmods
-
-# Install hardware support
-dnf5 -y install zenergy ryzen-smu
-dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' akmod-new-lg4ff
 
 # Install general packages
 dnf5 -y install btop fish
 
-# Remove kate
-dnf5 -y remove kate
-
-# Remove fcitx5
-dnf5 -y remove kcm-fcitx5 fcitx5-*
+# Remove packages
+dnf5 -y remove kate kcm-fcitx5 fcitx5-*
 
 # Disable COPRs
-dnf5 -y copr disable ublue-os/akmods
 dnf5 -y copr disable ublue-os/packages
 
 ### System units
