@@ -1,24 +1,26 @@
 #!/bin/bash
-
 set -ouex pipefail
 
-### Install packages
+### Packages
+# Enable COPRs
+dnf5 -y copr enable ublue-os/packages
+dnf5 -y copr enable ublue-os/akmods
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/43/x86_64/repoview/index.html&protocol=https&redirect=1
+# Install hardware support
+dnf5 -y install zenergy
 
-# this installs a package from fedora repos
-dnf5 install -y tmux 
+# Install general packages
+dnf5 -y install btop fish
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+# Remove kate
+dnf5 -y remove kate
 
-#### Example for enabling a System Unit File
+# Remove fcitx5
+dnf5 -y remove kcm-fcitx5 fcitx5-*
 
-systemctl enable podman.socket
+# Disable COPRs
+dnf5 -y copr disable ublue-os/akmods
+dnf5 -y copr disable ublue-os/packages
+
+### System units
+# systemctl enable podman.socket
