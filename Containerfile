@@ -5,15 +5,6 @@ COPY build_files /
 # Base Image
 FROM ghcr.io/ublue-os/kinoite-nvidia:43
 
-## Other possible base images include:
-# FROM ghcr.io/ublue-os/bazzite:latest
-# FROM ghcr.io/ublue-os/bluefin-nvidia:stable
-# 
-# ... and so on, here are more base images
-# Universal Blue Images: https://github.com/orgs/ublue-os/packages
-# Fedora base image: quay.io/fedora/fedora-bootc:41
-# CentOS base images: quay.io/centos-bootc/centos-bootc:stream10
-
 ### [IM]MUTABLE /opt
 ## Some bootable images, like Fedora, have /opt symlinked to /var/opt, in order to
 ## make it mutable/writable for users. However, some packages write files to this directory,
@@ -34,7 +25,14 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
-    
+
+### AKMODS
+## Adding relevant akmods from ublue-os/akmods
+COPY --from=ghcr.io/ublue-os/akmods:main-43 / /tmp/akmods-common
+RUN find /tmp/akmods-common
+RUN dnf5 -y install /tmp/rpms/ublue-os/ublue-os-akmods*.rpm
+RUN dnf5 -y install /tmp/rpms/kmods/kmod-v4l2loopback*.rpm
+
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint
