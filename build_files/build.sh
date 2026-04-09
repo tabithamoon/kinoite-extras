@@ -7,7 +7,8 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/akmods
 
 # Install hardware support
-dnf5 -y install zenergy
+dnf5 -y install zenergy ryzen-smu
+dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' akmod-new-lg4ff
 
 # Install general packages
 dnf5 -y install btop fish
